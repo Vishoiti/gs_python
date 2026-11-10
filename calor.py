@@ -27,3 +27,19 @@ def acao_do_estado(estado):
             return "Suspender o trabalho pesado até o calor baixar."
         case _:
             return "Estado desconhecido: confira a leitura."
+
+
+def indice_calor(t_c, ur):
+    t = t_c * 9 / 5 + 32
+    hi = 0.5 * (t + 61.0 + (t - 68.0) * 1.2 + ur * 0.094)
+
+    if (hi + t) / 2 >= 80:
+        hi = (-42.379 + 2.04901523 * t + 10.14333127 * ur - 0.22475541 * t * ur  - 0.00683783 * t * t - 0.05481717 * ur * ur + 0.00122874 * t * t * ur
+            + 0.00085282 * t * ur * ur - 0.00000199 * t * t * ur * ur)
+
+        if ur < 13 and 80 <= t <= 112:
+            hi -=((13 - ur) / 4) * math.sqrt((17 - abs(t - 95)) / 17)
+        elif ur > 85 and 80 <= t <= 87:
+            hi += ((ur - 85) / 10) * ((87 - t) / 5)            
+
+    return (hi - 32) * 5 / 9
