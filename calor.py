@@ -1,0 +1,5 @@
+import math
+
+LIMITES_IC = (27.0, 32.0, 41.0)
+
+ESTADOS = ("NORMAL", "ATENCAOO", "CRITICO", "PERIGO")
