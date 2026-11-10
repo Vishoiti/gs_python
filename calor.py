@@ -13,3 +13,17 @@ def nivel_por_indice(ic):
         return "ATENCAO"
     else:
         return "NORMAL"
+
+
+def acao_do_estado(estado):
+    match estado:
+        case "NORMAL":
+            return "Trabalho normal."
+        case "ATENCAO":
+            return "Água e sombra sempre que possível."
+        case "CRITICO":
+            return "Pausa na sombra na próxima parada da rota."
+        case "PERIGO":
+            return "Suspender o trabalho pesado até o calor baixar."
+        case _:
+            return "Estado desconhecido: confira a leitura."
