@@ -45,3 +45,43 @@ def listar_equipes():
     print("\n--- Equipes cadastradas ---")
     equipes = ler_json(CAMINHO_EQUIPES, [])
     exibir_equipes(equipes)
+
+
+def buscar_equipe(equipes, codigo):
+    for equipe in equipes:
+        if equipe["codigo"] == codigo:
+            return equipe
+    return None
+
+
+def editar_equipe():
+    print("\n--- Editar equipe ---")
+    equipes = ler_json(CAMINHO_EQUIPES, [])
+    if len(equipes) == 0:
+        print("Nenhuma equipe cadastrada.")
+        return
+
+    exibir_equipes(equipes)
+    codigo = input("\nCódigo da equipe a editar: ").strip().upper()
+    equipe = buscar_equipe(equipes, codigo)
+    if equipe is None:
+        print(f"Equipe {codigo} não encontrada.")
+        return
+
+    print("Rota e turno: deixe em branco para manter o valor atual.")
+    rota = input(f"Rota [{equipe['rota']}]: ").strip()
+    if rota != "":
+        equipe["rota"] = rota
+
+    turno = input(f"Turno (diurno/noturno) [{equipe['turno']}]: ").strip().lower()
+    if turno != "":
+        if turno in TURNOS:
+            equipe["turno"] = turno
+        else:
+            print("Turno inválido, mantido o valor atual.")
+
+    equipe["coletores"] = ler_inteiro(
+        f"Quantidade de coletores [{equipe['coletores']}]: ", 1, 30)
+
+    salvar_json(CAMINHO_EQUIPES, equipes)
+    print(f"Equipe {codigo} atualizada com sucesso.")
