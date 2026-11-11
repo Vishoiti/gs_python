@@ -2,7 +2,7 @@ import os
 os.system("cls")
 
 from subalgoritmo import exibir_menu, escolha
-
+from calculadora import calcular_estresse_termico
 
 def main():
     while True:
@@ -14,7 +14,7 @@ def main():
                 print("Encerrando o Pausa Certa. Até logo!")
                 break
             case 1:
-                print("Calculadora de estresse térmico (em construção).")
+                calcular_estresse_termico()
 
 
 if __name__ == "__main__":
