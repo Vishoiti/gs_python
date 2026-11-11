@@ -1,5 +1,5 @@
 from arquivos import ler_json, salvar_json
-from entrada import ler_inteiro, ler_opcao
+from entrada import ler_inteiro, ler_opcao, confirmar
 
 CAMINHO_EQUIPES = "dados/equipes.json"
 TURNOS = ("diurno", "noturno")
@@ -85,3 +85,29 @@ def editar_equipe():
 
     salvar_json(CAMINHO_EQUIPES, equipes)
     print(f"Equipe {codigo} atualizada com sucesso.")
+
+
+def excluir_equipe():
+    print("\n--- Excluir equipe ---")
+    equipes = ler_json(CAMINHO_EQUIPES, [])
+    if len(equipes) == 0:
+        print("Nenhuma equipe cadastrada.")
+        return
+
+    exibir_equipes(equipes)
+    codigo = input("\nCódigo da equipe a excluir: ").strip().upper()
+    equipe = buscar_equipe(equipes, codigo)
+    if equipe is None:
+        print(f"Equipe {codigo} não encontrada.")
+        return
+
+    if confirmar(f"Excluir a equipe {codigo}?"):
+        equipes.remove(equipe)
+        salvar_json(CAMINHO_EQUIPES, equipes)
+        print(f"Equipe {codigo} excluída.")
+    else:
+        print("Exclusão cancelada.")
+
+
+if __name__ == "__main__":
+    excluir_equipe()
