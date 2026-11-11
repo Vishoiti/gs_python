@@ -1,17 +1,18 @@
+from entrada import ler_inteiro
+
+
 def exibir_menu():
     print("""
+        \n-------------- PAUSA CERTA | Segurança do trabalho --------------
         0 - SAIR
-        """)        
+        1 - Calcular estresse térmico agora
+        """)
 
-def ler_inteiro(mensagem: str, minimo: int, maximo: int) -> int: 
-    while True:
-        try:
-            valor = int(input(mensagem))
-            if minimo <= valor <= maximo:
-                return valor
-            print(f"Digite um número entre {minimo} e {maximo}.")
-        except ValueError:
-            print("Entrada inválida. Digite apenas números.")
 
-def escolha():
-    return ler_inteiro("Escolha: ", 0, 0)
+def escolha(maximo):
+    return ler_inteiro("Escolha: ", 0, maximo)
+
+
+if __name__ == "__main__":
+    exibir_menu()
+    print(f"Você escolheu: {escolha(1)}")
