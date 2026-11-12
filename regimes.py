@@ -4,7 +4,7 @@ from arquivos import ler_json, salvar_json
 from entrada import ler_inteiro, ler_opcao
 from equipes import CAMINHO_EQUIPES, buscar_equipe
 
-CAMINHO_REGIMES = "dados/regimes.json"
+from equipes import CAMINHO_EQUIPES, CAMINHO_REGIMES, buscar_equipe
 MODELOS = ("micropausas", "pausa longa")
 
 
@@ -57,8 +57,4 @@ def listar_regimes():
     print("\n--- Regimes de pausa ---")
     regimes = ler_json(CAMINHO_REGIMES, {})
     exibir_regimes(regimes)
-    print("\nObs.: os valores são definidos pela empresa e não correspondem à tabela de nenhuma norma.")
-
-
-if __name__ == "__main__":
-    listar_regimes()
+    print("\nObs.: os valores são definidos pela empresa e não correspondem à tabela de nenhuma norma.")   

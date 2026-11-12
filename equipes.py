@@ -3,7 +3,7 @@ from entrada import ler_inteiro, ler_opcao, confirmar
 
 CAMINHO_EQUIPES = "dados/equipes.json"
 TURNOS = ("diurno", "noturno")
-
+CAMINHO_REGIMES = "dados/regimes.json"
 
 def cadastrar_equipe():
     print("\n--- Cadastrar equipe ---")
@@ -52,6 +52,13 @@ def buscar_equipe(equipes, codigo):
         if equipe["codigo"] == codigo:
             return equipe
     return None
+
+
+def remover_regime(codigo):
+    regimes = ler_json(CAMINHO_REGIMES, {})
+    if codigo in regimes:
+        del regimes[codigo]
+        salvar_json(CAMINHO_REGIMES, regimes)
 
 
 def editar_equipe():
@@ -104,10 +111,7 @@ def excluir_equipe():
     if confirmar(f"Excluir a equipe {codigo}?"):
         equipes.remove(equipe)
         salvar_json(CAMINHO_EQUIPES, equipes)
+        remover_regime(codigo)
         print(f"Equipe {codigo} excluída.")
     else:
         print("Exclusão cancelada.")
-
-
-if __name__ == "__main__":
-    excluir_equipe()
