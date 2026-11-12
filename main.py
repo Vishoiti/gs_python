@@ -3,11 +3,13 @@ os.system("cls")
 
 from subalgoritmo import exibir_menu, escolha
 from calculadora import calcular_estresse_termico
+from menu_equipes import menu_equipes
+
 
 def main():
     while True:
         exibir_menu()
-        opcao = escolha(1)
+        opcao = escolha(2)
 
         match opcao:
             case 0:
@@ -15,7 +17,5 @@ def main():
                 break
             case 1:
                 calcular_estresse_termico()
-
-
-if __name__ == "__main__":
-    main()    
+            case 2:
+                menu_equipes()

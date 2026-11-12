@@ -6,6 +6,7 @@ def exibir_menu():
         \n-------------- PAUSA CERTA | Segurança do trabalho --------------
         0 - SAIR
         1 - Calcular estresse térmico agora
+        2 - Equipes e regimes de pausa
         """)
 
 
