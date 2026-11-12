@@ -31,10 +31,34 @@ def definir_regime():
     regimes = ler_json(CAMINHO_REGIMES, {})
     regimes[codigo] = {
         "modelo": modelo,
-        "mimutos_pausa": minutos_pausa,
+        "minutos_pausa": minutos_pausa,
         "max_sem_pausa_critico": max_sem_pausa,
         "responsavel": responsavel,
         "definido_em": str(date.today()),
     }
     salvar_json(CAMINHO_REGIMES, regimes)
     print(f"Regime da equipe {codigo} salvo.")
+
+
+def exibir_regimes(regimes):
+    if len(regimes) == 0:
+        print("Nenhum regime definido.")
+        return
+
+    print(f"{'Equipe':<14}{'Modelo':<13}{'Pausa':<8}{'Max. Crit.':<12}{'Responsável':<18}{'Data'}")
+    print("-" * 75)
+    for codigo, regime in regimes.items():
+        print(f"{codigo:<14}{regime['modelo']:<13}{str(regime['minutos_pausa']) + 'min':<8}"
+              f"{str(regime['max_sem_pausa_critico']) + 'min':<12}"
+              f"{regime['responsavel']:<18}{regime['definido_em']}")
+
+
+def listar_regimes():
+    print("\n--- Regimes de pausa ---")
+    regimes = ler_json(CAMINHO_REGIMES, {})
+    exibir_regimes(regimes)
+    print("\nObs.: os valores são definidos pela empresa e não correspondem à tabela de nenhuma norma.")
+
+
+if __name__ == "__main__":
+    listar_regimes()
