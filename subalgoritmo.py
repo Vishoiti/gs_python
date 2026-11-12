@@ -9,10 +9,17 @@ def exibir_menu():
         """)
 
 
+def exibir_menu_equipes():
+    print(f"""\n--- Equipes e regimes de pausa ---
+                1 - Cadastrar equipe
+                2 - Listar equipes
+                3 - Editar equipe
+                4 - Excluir equipe
+                5 - Definir regime de pausa
+                6 - Listar regimes
+                0 - Voltar
+    """)
+
+
 def escolha(maximo):
     return ler_inteiro("Escolha: ", 0, maximo)
-
-
-if __name__ == "__main__":
-    exibir_menu()
-    print(f"Você escolheu: {escolha(1)}")
