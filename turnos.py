@@ -39,6 +39,13 @@ def ler_data(mensagem):
         return texto
 
 
+def buscar_turno(turnos, codigo, data):
+    for turno in turnos:
+        if turno["equipe"] == codigo and turno["data"] == data:
+            return turno
+        return None
+
+
 def registrar_turno():
     print("\n--- Registrar turno ---")
     equipes = ler_json(CAMINHO_EQUIPES, [])
@@ -75,3 +82,39 @@ def registrar_turno():
     turnos.append(turno)
     salvar_json(CAMINHO_TURNOS, turnos)
     print(f"Turno da equipe {codigo} em {data} registrado.")
+
+
+def registrar_pausa():
+    print("\n--- Registrar pausa ---")
+    turnos = ler_json(CAMINHO_TURNOS, [])
+    if len(turnos) == 0:
+        print("Nenhum turno registrado.")
+        return
+
+    codigo = input("Código da equipe: ").strip().upper()
+    data = ler_data("Data do turno (AAAA-MM-DD, Enter para hoje): ")
+    turno = buscar_turno(turnos, codigo, data)
+    if turno is None:
+        print(f"Não há turno da equipe {codigo} em {data}.")
+        return
+
+    print(f"Turno de {turno['inicio']} a {turno['fim']}.")
+    inicio = ler_hora("Início da pausa (HH:MM): ")
+    fim = ler_hora("Fim da pausa (HH:MM): ")
+
+    inicio_min = hora_para_minutos(inicio)
+    fim_min = hora_para_minutos(fim)
+    if fim_min <= inicio_min:
+        print("O fim da pausa precisa ser depois do início.")
+        return
+    if (inicio_min < hora_para_minutos(turno["inicio"]) or fim_min > hora_para_minutos(turno["fim"])):
+        print("A pausa precisa estar dentro do horário do turno.")
+        return
+
+    turno["pausas"].append([inicio, fim])
+    salvar_json(CAMINHO_TURNOS, turnos)
+    print(f"Pausa de {inicio} a {fim} registrada.")
+
+
+if __name__ == "__main__":
+    registrar_pausa()
