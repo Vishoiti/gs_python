@@ -1,7 +1,8 @@
 from datetime import date, datetime
 from arquivos import ler_json, salvar_json
-from entrada import ler_inteiro, ler_opcao, confirmar
+from entrada import ler_float, ler_inteiro, ler_opcao, confirmar
 from equipes import CAMINHO_EQUIPES, buscar_equipe
+from calor import indice_calor, nivel_por_indice
 
 CAMINHO_TURNOS = "dados/turnos.json"
 
@@ -116,5 +117,37 @@ def registrar_pausa():
     print(f"Pausa de {inicio} a {fim} registrada.")
 
 
-if __name__ == "__main__":
-    registrar_pausa()
+def registrar_leitura():
+    print("\n--- Registrar leitura de calor ---")
+    turnos = ler_json(CAMINHO_TURNOS, [])
+    if len(turnos) == 0:
+        print("Nenhum turno registrado.")
+        return
+
+    codigo = input("Código da equipe: ").strip().upper()
+    data = ler_data("Data do turno (AAAA-MM-DD, Enter para hoje): ")
+    turno = buscar_turno(turnos, codigo, data)
+    if turno is None:
+        print(f"Não há turno da equipe {codigo} em {data}.")
+        return
+
+    print(f"Turno de {turno['inicio']} a {turno['fim']}.")
+    hora = ler_hora("Horário da leitura (HH:MM): ")
+    hora_min = hora_para_minutos(hora)
+    if (hora_min < hora_para_minutos(turno["inicio"]) or hora_min > hora_para_minutos(turno["fim"])):
+        print("A leitura precisa estar dentro do horário do turno.")
+        return
+
+    temperatura = ler_float("Temperatura do ar (°C): ", -20, 50)
+    umidade = ler_float("Umidade relativo (%): ", 5, 99)
+
+    ic = indice_calor(temperatura, umidade)
+    estado = nivel_por_indice(ic)
+
+    turno["leituras"].append({
+        "hora": hora,
+        "indiceCalor_c": round(ic, 1),
+        "estado": estado,
+    })
+    salvar_json(CAMINHO_TURNOS, turnos)
+    print(f"Leitura das {hora} registrada: {ic:.1f} °C, estado {estado}.")
