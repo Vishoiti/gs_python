@@ -44,7 +44,7 @@ def buscar_turno(turnos, codigo, data):
     for turno in turnos:
         if turno["equipe"] == codigo and turno["data"] == data:
             return turno
-        return None
+    return None
 
 
 def registrar_turno():
@@ -139,7 +139,7 @@ def registrar_leitura():
         return
 
     temperatura = ler_float("Temperatura do ar (°C): ", -20, 50)
-    umidade = ler_float("Umidade relativo (%): ", 5, 99)
+    umidade = ler_float("Umidade relativa (%): ", 5, 99)
 
     ic = indice_calor(temperatura, umidade)
     estado = nivel_por_indice(ic)
