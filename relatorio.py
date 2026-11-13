@@ -37,3 +37,42 @@ def calcular_relatorio(codigo):
         relatorio["minutos_critico"] += minutos_em_estado(turno, ("CRITICO",))
         relatorio["minutos_perigo"] += minutos_em_estado(turno, ("PERIGO",))
     return relatorio
+
+
+def formatar_horas(minutos):
+    return f"{minutos // 60}h{minutos % 60:02d}"    # Converte minutos em texto "XhYY"
+
+
+def exibir_relatorio(relatorio):
+    print(f"\n--- Relatório da equipe {relatorio['equipe']} ---")
+    if relatorio["turnos"] == 0:
+        print("Nenhum turno registrado para esta equipe.")
+        return
+
+    print(
+        f"""Turnos registrados: {relatorio['turnos']}
+            Duração total das rotas: {formatar_horas(relatorio['duracao_total'])}
+            \nTempo em cada estado (estimado pelas leituras):
+            NORMAL: {formatar_horas(relatorio['minutos_normal'])}
+            ATENCAO: {formatar_horas(relatorio['minutos_atencao'])}
+            CRITICO: {formatar_horas(relatorio['minutos_critico'])}
+            PERIGO: {formatar_horas(relatorio['minutos_perigo'])}
+            \nPausas:
+            Pausas realizadas: {relatorio['pausas_realizadas']}
+            Tempo total em pausa: {relatorio['minutos_em_pausa']} min
+""")
+    if relatorio["tem_regime"]:
+        recomendadas = relatorio["pausas_recomendadas"]
+        realizadas = relatorio["pausas_realizadas"]
+        print(f"Pausas recomendadas: {recomendadas}")
+        if recomendadas == 0:
+            print("  Situação: nenhuma pausa era devida")
+        elif realizadas >= recomendadas:
+            print(f" Situação: todas as pausas recomendadas foram feitas.")   
+        else:
+            faltaram = recomendadas - realizadas
+            print(f"  Situação: {realizadas} de {recomendadas} feitas ({faltaram} a menos).")
+        print("\nComo ler: as pausas recomendadas são estimadas pelo tempo em")
+        print(" CRITICO/PERIGO e pelo limite sem pausa que a empresa definiu.")
+    else:
+        print(" Esta equipe não tem regime de pausa definido.")
