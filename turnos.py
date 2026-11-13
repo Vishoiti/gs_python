@@ -206,3 +206,28 @@ def minutos_em_estado(turno, estados):
         if leituras[i]["estado"] in estados:
             total += fim - inicio
     return total
+
+
+def cumprimento(turno, regime):
+
+    resultado = {
+        "duracao_rota": duracao_rota(turno),
+        "pausas_realizadas": len(turno["pausas"]),
+        "minutos_em_pausa": minutos_em_pausa(turno),
+        "minutos_critico_perigo": minutos_em_estado(turno, ("CRITICO", "PERIGO")),
+        "pausas_recomendadas": None,
+        "percentual": None,
+    }
+
+    if regime is None:
+        return resultado
+
+    recomendadas = resultado["minutos_critico_perigo"] // regime["max_sem_pausa_critico"]
+    resultado["pausas_recomendadas"] = recomendadas
+
+    if recomendadas == 0:
+        resultado["percentual"] = 100.0
+    else:
+        percentual = resultado["pausas_realizadas"] / recomendadas * 100
+        resultado["percentual"] = min(percentual, 100.0)
+    return resultado
