@@ -151,3 +151,29 @@ def registrar_leitura():
     })
     salvar_json(CAMINHO_TURNOS, turnos)
     print(f"Leitura das {hora} registrada: {ic:.1f} °C, estado {estado}.")
+
+
+def exibir_turnos(turnos):
+    if len(turnos) == 0:
+        print("Nenhum turno encontrado.")
+        return
+
+    print(f"{'Data':<12}{'Inicio':<8}{'fim':<8}{'Pausas':<8}{'Leituras'}")
+    print("-" * 46)
+    for turno in turnos:
+        print(f"{turno['data']:<12}{turno['inicio']:<8}{turno['fim']:<8}"
+              f"{len(turno['pausas']):<8}{len(turno['leituras'])}")
+
+
+def listar_turnos():
+    print("\n--- Turnos de uma equipe ---")
+    turnos = ler_json(CAMINHO_TURNOS, [])
+    codigo = input("Código da equipe: ").strip().upper()
+
+    turnos_da_equipe = []
+    for turno in turnos:
+        if turno["equipe"] == codigo:
+            turnos_da_equipe.append(turno)
+
+    print(f"\nEquipe {codigo}")
+    exibir_turnos(turnos_da_equipe)
