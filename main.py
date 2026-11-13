@@ -19,3 +19,9 @@ def main():
                 calcular_estresse_termico()
             case 2:
                 menu_equipes()
+            case 3:
+                menu_turnos()
+
+
+if __name__ == "__main__":
+    main()
