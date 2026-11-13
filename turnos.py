@@ -177,3 +177,32 @@ def listar_turnos():
 
     print(f"\nEquipe {codigo}")
     exibir_turnos(turnos_da_equipe)
+
+
+def duracao_rota(turno):
+    return hora_para_minutos(turno["fim"]) - hora_para_minutos(turno["inicio"])
+
+
+def minutos_em_pausa(turno):
+    total = 0
+    for inicio, fim in turno["pausas"]:
+        total +=  hora_para_minutos(fim) - hora_para_minutos(inicio)
+    return total
+
+
+def horario_da_leitura(leitura):
+    return hora_para_minutos(leitura["hora"])
+
+
+def minutos_em_estado(turno, estados):
+    leituras = sorted(turno["leituras"], key=horario_da_leitura)
+    total = 0
+    for i in range(len(leituras)):
+        inicio = hora_para_minutos(leituras[i]["hora"])
+        if i + 1 < len(leituras):
+            fim = hora_para_minutos(leituras[i + 1]["hora"])
+        else:
+            fim = hora_para_minutos(turno["fim"])
+        if leituras[i]["estado"] in estados:
+            total += fim - inicio
+    return total
