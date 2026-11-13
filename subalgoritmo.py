@@ -19,7 +19,17 @@ def exibir_menu_equipes():
                 5 - Definir regime de pausa
                 6 - Listar regimes
                 0 - Voltar
-    """)
+""")
+
+
+def exibir_menu_turnos():
+    print(f"""\n--- Turnos e pausas ---
+                1 - Registrar turno
+                2 - Registrar pausa
+                3 - Registrar leitura de calor
+                4 - Listar turnos de uma equipe
+                0 - Voltar    
+""")
 
 
 def escolha(maximo):
