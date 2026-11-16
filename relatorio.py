@@ -1,6 +1,7 @@
 from arquivos import ler_json
 from equipes import CAMINHO_REGIMES
 from turnos import CAMINHO_TURNOS, cumprimento, minutos_em_estado
+from datetime import date
 
 
 def calcular_relatorio(codigo):
@@ -43,36 +44,55 @@ def formatar_horas(minutos):
     return f"{minutos // 60}h{minutos % 60:02d}"    # Converte minutos em texto "XhYY"
 
 
-def exibir_relatorio(relatorio):
-    print(f"\n--- Relatório da equipe {relatorio['equipe']} ---")
+def montar_relatorio(relatorio):
+    linhas = [f"\n--- Relatório da equipe {relatorio['equipe']} ---"]
     if relatorio["turnos"] == 0:
-        print("Nenhum turno registrado para esta equipe.")
-        return
+        linhas.append("Nenhum turno registrado para esta equipe.")
+        return linhas
+    
+    linhas.append(f"Turnos registrados: {relatorio['turnos']}")
+    linhas.append(f"Duração total das rotas: {formatar_horas(relatorio['duracao_total'])}")
+    linhas.append("")
+    linhas.append("Tempo em cada estado (estimado pelas leituras):")
+    linhas.append(f"  NORMAL:  {formatar_horas(relatorio['minutos_normal'])}")
+    linhas.append(f"  ATENCAO: {formatar_horas(relatorio['minutos_atencao'])}")
+    linhas.append(f"  CRITICO: {formatar_horas(relatorio['minutos_critico'])}")
+    linhas.append(f"  PERIGO:  {formatar_horas(relatorio['minutos_perigo'])}")
+    linhas.append("")
+    linhas.append("Pausas:")
+    linhas.append(f"  Pausas realizadas: {relatorio['pausas_realizadas']}")
+    linhas.append(f"  Tempo total em pausa: {relatorio['minutos_em_pausa']} min")
 
-    print(
-        f"""Turnos registrados: {relatorio['turnos']}
-            Duração total das rotas: {formatar_horas(relatorio['duracao_total'])}
-            \nTempo em cada estado (estimado pelas leituras):
-            NORMAL: {formatar_horas(relatorio['minutos_normal'])}
-            ATENCAO: {formatar_horas(relatorio['minutos_atencao'])}
-            CRITICO: {formatar_horas(relatorio['minutos_critico'])}
-            PERIGO: {formatar_horas(relatorio['minutos_perigo'])}
-            \nPausas:
-            Pausas realizadas: {relatorio['pausas_realizadas']}
-            Tempo total em pausa: {relatorio['minutos_em_pausa']} min
-""")
     if relatorio["tem_regime"]:
         recomendadas = relatorio["pausas_recomendadas"]
         realizadas = relatorio["pausas_realizadas"]
-        print(f"Pausas recomendadas: {recomendadas}")
+        linhas.append(f"  Pausas recomendadas: {recomendadas}")
         if recomendadas == 0:
-            print("  Situação: nenhuma pausa era devida")
+            linhas.append("  Situação: Nenhuma pausa era devida.")
         elif realizadas >= recomendadas:
-            print(f" Situação: todas as pausas recomendadas foram feitas.")   
+            linhas.append(f" Situação: Todas as pausas recomendadas foram feitas.")   
         else:
             faltaram = recomendadas - realizadas
-            print(f"  Situação: {realizadas} de {recomendadas} feitas ({faltaram} a menos).")
-        print("\nComo ler: as pausas recomendadas são estimadas pelo tempo em")
-        print(" CRITICO/PERIGO e pelo limite sem pausa que a empresa definiu.")
+            linhas.append(f"  Situação: {realizadas} de {recomendadas} feitas ({faltaram} a menos).")
+        linhas.append("\nComo ler: as pausas recomendadas são estimadas pelo tempo em")
+        linhas.append("  CRITICO/PERIGO e pelo limite sem pausa que a empresa definiu.")
     else:
-        print(" Esta equipe não tem regime de pausa definido.")
+        linhas.append("  Esta equipe não tem regime de pausa definido.")
+    linhas.append("")
+    linhas.append("Obs.: valores estimados; relatório por equipe, sem identificar pessoas.")
+    return linhas
+
+
+def exibir_relatorio(relatorio):
+    print()
+    for linha in montar_relatorio(relatorio):
+        print(linha)
+
+
+def salvar_relatorio(relatorio):
+    nome = f"relatorio_{date.today()}.txt"
+    with open(nome, "a", encoding="utf-8") as arquivo:
+        for linha in montar_relatorio(relatorio):
+            arquivo.write(linha + "\n")
+        arquivo.write("\n")
+    return nome
