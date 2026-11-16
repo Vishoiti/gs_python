@@ -8,6 +8,7 @@ def exibir_menu():
         1 - Calcular estresse térmico agora
         2 - Equipes e regimes de pausa
         3 - Registrar turno e pausas
+        4 - Relatório por equipe
         """)
 
 

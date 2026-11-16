@@ -1,5 +1,6 @@
 from arquivos import ler_json
-from equipes import CAMINHO_REGIMES
+from entrada import confirmar
+from equipes import CAMINHO_REGIMES, CAMINHO_EQUIPES, exibir_equipes, buscar_equipe
 from turnos import CAMINHO_TURNOS, cumprimento, minutos_em_estado
 from datetime import date
 
@@ -96,3 +97,22 @@ def salvar_relatorio(relatorio):
             arquivo.write(linha + "\n")
         arquivo.write("\n")
     return nome
+
+
+def gerar_relatorio():
+    print("\n--- Relatório por equipe ---")
+    equipes = ler_json(CAMINHO_EQUIPES, [])
+    if len(equipes) == 0:
+        print("Nenhuma equipe cadastrada.")
+        return
+
+    exibir_equipes(equipes)
+    codigo = input("\nCódigo da equipe: ").strip().upper()
+    if buscar_equipe(equipes,codigo) is None:
+        print(f"Equipe {codigo} não encontrada.")
+        return
+
+    relatorio = calcular_relatorio(codigo)
+    exibir_relatorio(relatorio)
+    if relatorio["turnos"] > 0 and confirmar("\nSalvar este relatório em arquivo .txt?"):
+        print(f"Relatório salvo em {salvar_relatorio(relatorio)}.")
