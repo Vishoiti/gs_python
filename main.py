@@ -5,12 +5,13 @@ from subalgoritmo import exibir_menu, escolha
 from calculadora import calcular_estresse_termico
 from submenus import menu_equipes, menu_turnos
 from relatorio import gerar_relatorio
+from cartao import exibir_cartao_alerta
 
 
 def main():
     while True:
         exibir_menu()
-        opcao = escolha(4)
+        opcao = escolha(5)
 
         match opcao:
             case 0:
@@ -24,6 +25,9 @@ def main():
                 menu_turnos()
             case 4:
                 gerar_relatorio()
+                input("\nPressione Enter para voltar ao menu...")
+            case 5:
+                exibir_cartao_alerta()
                 input("\nPressione Enter para voltar ao menu...")
 
 if __name__ == "__main__":

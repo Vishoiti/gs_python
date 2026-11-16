@@ -9,6 +9,7 @@ def exibir_menu():
         2 - Equipes e regimes de pausa
         3 - Registrar turno e pausas
         4 - Relatório por equipe
+        5 - Sinais de alerta do calor
         """)
 
 
