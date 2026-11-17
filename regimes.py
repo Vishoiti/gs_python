@@ -9,6 +9,7 @@ MODELOS = ("micropausas", "pausa longa")
 
 
 def definir_regime():
+    """Define (ou substitui) o regime de pausa de uma equipe."""
     print("\n--- Definir regime de pausa ---")
     equipes = ler_json(CAMINHO_EQUIPES, [])
     if len(equipes) == 0:
@@ -41,6 +42,7 @@ def definir_regime():
 
 
 def exibir_regimes(regimes):
+    """Mostra o dicionário de regimes recebido, uma equipe por linha."""
     if len(regimes) == 0:
         print("Nenhum regime definido.")
         return
@@ -54,6 +56,7 @@ def exibir_regimes(regimes):
 
 
 def listar_regimes():
+    """Carrega os regimes do JSON e mostra na tela."""
     print("\n--- Regimes de pausa ---")
     regimes = ler_json(CAMINHO_REGIMES, {})
     exibir_regimes(regimes)

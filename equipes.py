@@ -6,6 +6,7 @@ TURNOS = ("diurno", "noturno")
 CAMINHO_REGIMES = "dados/regimes.json"
 
 def cadastrar_equipe():
+    """Pede os dados de uma nova equipe e grava no equipes.json."""
     print("\n--- Cadastrar equipe ---")
     equipes = ler_json(CAMINHO_EQUIPES, [])
 
@@ -30,6 +31,7 @@ def cadastrar_equipe():
 
 
 def exibir_equipes(equipes):
+    """Mostra a lista de equipes recebida, uma por linha."""
     if len(equipes) == 0:
         print("Nenhuma equipe cadastrada.")
         return
@@ -42,12 +44,14 @@ def exibir_equipes(equipes):
 
 
 def listar_equipes():
+    """Carrega as equipes do JSON e mostra na tela."""
     print("\n--- Equipes cadastradas ---")
     equipes = ler_json(CAMINHO_EQUIPES, [])
     exibir_equipes(equipes)
 
 
 def buscar_equipe(equipes, codigo):
+    """Devolve o dicionário da equipe com o código informado, ou None."""
     for equipe in equipes:
         if equipe["codigo"] == codigo:
             return equipe
@@ -55,6 +59,7 @@ def buscar_equipe(equipes, codigo):
 
 
 def remover_regime(codigo):
+    """Remove do regimes.json o regime da equipe, se existir."""
     regimes = ler_json(CAMINHO_REGIMES, {})
     if codigo in regimes:
         del regimes[codigo]
@@ -62,6 +67,7 @@ def remover_regime(codigo):
 
 
 def editar_equipe():
+    """Altera rota, turno e coletores de uma equipe já cadastrada."""
     print("\n--- Editar equipe ---")
     equipes = ler_json(CAMINHO_EQUIPES, [])
     if len(equipes) == 0:
@@ -95,6 +101,7 @@ def editar_equipe():
 
 
 def excluir_equipe():
+    """Remove uma equipe do equipes.json, depois de confirmar."""
     print("\n--- Excluir equipe ---")
     equipes = ler_json(CAMINHO_EQUIPES, [])
     if len(equipes) == 0:

@@ -209,7 +209,11 @@ def minutos_em_estado(turno, estados):
 
 
 def cumprimento(turno, regime):
+    """Compara pausas recomendadas e realizadas de um turno.
 
+    Devolve um dicionário com os números. Se o regime for None
+    (equipe sem regime definido), não calcula recomendadas nem percentual.
+    """
     resultado = {
         "duracao_rota": duracao_rota(turno),
         "pausas_realizadas": len(turno["pausas"]),

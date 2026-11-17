@@ -6,6 +6,7 @@ from datetime import date
 
 
 def calcular_relatorio(codigo):
+    """Soma os números de todos os turnos da equipe e devolve um dicionário."""
     turnos = ler_json(CAMINHO_TURNOS, [])
     regimes = ler_json(CAMINHO_REGIMES, {})
     regime = regimes.get(codigo)
@@ -42,10 +43,12 @@ def calcular_relatorio(codigo):
 
 
 def formatar_horas(minutos):
-    return f"{minutos // 60}h{minutos % 60:02d}"    # Converte minutos em texto "XhYY"
+    """ Converte minutos em texto "XhYY"""
+    return f"{minutos // 60}h{minutos % 60:02d}"    
 
 
 def montar_relatorio(relatorio):
+    """Monta o texto do relatório e devolve uma lista de linhas."""
     linhas = [f"\n--- Relatório da equipe {relatorio['equipe']} ---"]
     if relatorio["turnos"] == 0:
         linhas.append("Nenhum turno registrado para esta equipe.")
@@ -85,12 +88,14 @@ def montar_relatorio(relatorio):
 
 
 def exibir_relatorio(relatorio):
+    """Mostra o relatório de uma equipe no terminal."""
     print()
     for linha in montar_relatorio(relatorio):
         print(linha)
 
 
 def salvar_relatorio(relatorio):
+    """Grava o relatório em relatorio_AAAA-MM-DD.txt e devolve o nome do arquivo."""
     nome = f"relatorio_{date.today()}.txt"
     with open(nome, "a", encoding="utf-8") as arquivo:
         for linha in montar_relatorio(relatorio):
@@ -100,6 +105,7 @@ def salvar_relatorio(relatorio):
 
 
 def gerar_relatorio():
+    """Pede a equipe, mostra o relatório e pergunta se quer salvar em .txt."""
     print("\n--- Relatório por equipe ---")
     equipes = ler_json(CAMINHO_EQUIPES, [])
     if len(equipes) == 0:

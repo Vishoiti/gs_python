@@ -1,9 +1,15 @@
+"""Opção 1 do menu: calculadora de estresse térmico."""
 from calor import (indice_calor, bulbo_umido, ibutg_estimado,
                    nivel_por_indice, acao_do_estado)
 from entrada import ler_float
 
 
 def calcular_estresse_termico():
+    """
+    Pede temperatura, umidade e globo, calcula o estresse térmico e mostra o resultado.
+    Mostra índice de calor, bulbo úmido, IBUTG estimado, estado e ação recomendada.
+    O IBUTG é uma estimativa e não substitui a medição da NHO 06.
+    """
     print("\n--- Calculadora de estresse térmico ---")
     temperatura = ler_float("Temperatura do ar (°C): ", -20, 50)
     umidade = ler_float("Umidade relativa (%): ", 5, 99)
@@ -22,4 +28,4 @@ def calcular_estresse_termico():
         Estado: {estado}
         Ação: {acao_do_estado(estado)}
         \nAtenção: o IBUTG é uma estimativa e não substitui a medição da NHO 06.""")
-    input("\nPressione Enter para voltar ao menu...")    
+    input("\nPressione Enter para voltar ao menu...") 

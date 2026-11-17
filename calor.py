@@ -1,3 +1,8 @@
+"""Módulo de cálculo de estresse térmico da Pausa Certa.
+
+Os limites do índice de calor seguem as faixas da NOAA, usadas como triagem.
+O IBUTG aqui é uma estimativa, não substitui a medição da NHO 06.
+"""
 import math
 
 LIMITES_IC = (27.0, 32.0, 41.0)
@@ -6,6 +11,7 @@ ESTADOS = ("NORMAL", "ATENCAO", "CRITICO", "PERIGO")
 
 
 def nivel_por_indice(ic):
+    """Recebe o índice de calor (°C) e devolve o nome do estado."""
     if ic >= LIMITES_IC[2]:
         return "PERIGO"
     elif ic >= LIMITES_IC[1]:
@@ -17,6 +23,7 @@ def nivel_por_indice(ic):
 
 
 def acao_do_estado(estado):
+    """Recebe o nome do estado e devolve a ação recomendada para a equipe."""
     match estado:
         case "NORMAL":
             return "Trabalho normal."
@@ -31,6 +38,11 @@ def acao_do_estado(estado):
 
 
 def indice_calor(t_c, ur):
+    """Índice de calor da NOAA (Rothfusz + ajustes). Entrada e saída em °C.
+    
+    Converte para °F, calcula com a fórmula simples e, se estiver quente o bastante,
+    troca pela fórmula completa. Corrige para ar muito seco (UR < 13 %) ou muito úmido (UR > 85 %).
+    """
     t = t_c * 9 / 5 + 32
     hi = 0.5 * (t + 61.0 + (t - 68.0) * 1.2 + ur * 0.094)
 
@@ -47,9 +59,15 @@ def indice_calor(t_c, ur):
 
 
 def bulbo_umido(t, ur):
+    """Fórmula empírica de Stull (2011). Vale para UR de 5 a 99% e T de -20 a 50 °C."""
     return (t * math.atan(0.151977 * math.sqrt(ur + 8.313659))
              + math.atan(t + ur) - math.atan(ur - 1.676331) + 0.00391838 * ur ** 1.5 * math.atan(0.023101 * ur) - 4.686035)
 
 
 def ibutg_estimado(tbu, tg, t):
+    """IBUTG externo = 0,7 tbn + 0,2 tg + 0,1 tbs.
+        
+    tbn é aproximado pelo bulbo úmido de Stull. É uma estimativa,
+    não substitui a medição da NHO 06.
+    """
     return 0.7 * tbu + 0.2 * tg + 0.1 * t
